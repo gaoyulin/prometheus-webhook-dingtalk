@@ -38,7 +38,7 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 		},
 	}
 	errors.New("error encoding DingTalk request    =======================  other")
-
+	print(promMessage)
 	notification.At = new(models.DingTalkNotificationAt)
 	if v, ok := map[string]string(promMessage.CommonLabels)["at_mobiles"]; ok {
 		notification.At.AtMobiles = strings.Split(strings.TrimSpace(v), ",")
