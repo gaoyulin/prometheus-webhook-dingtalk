@@ -13,8 +13,7 @@ alerts1='{
                 "job": "node",
                 "service": "prometheus_bot",
                 "severity": "warning",
-                "supervisor": "runit",
-                "atMobiles": "17313006617"
+                "supervisor": "runit"
             },
             "annotations": {
                 "summary": "Oops, something happend!"
@@ -35,7 +34,8 @@ alerts1='{
         "job": "node",
         "service": "prometheus_bot",
         "severity": "warning",
-        "supervisor": "runit"
+        "supervisor": "runit",
+        "at_mobiles": "17313006617"
     },
     "commonAnnotations": {
         "summary": "runit service prometheus_bot restarted, server01.int:9100"

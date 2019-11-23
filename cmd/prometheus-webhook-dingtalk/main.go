@@ -89,4 +89,5 @@ func main() {
 		level.Error(logger).Log("msg", "Error starting HTTP server", "err", err)
 		os.Exit(1)
 	}
+	initClient()
 }

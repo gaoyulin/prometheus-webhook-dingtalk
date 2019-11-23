@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/models"
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/nacos"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/template"
 	"github.com/pkg/errors"
 	"net/http"
@@ -12,7 +13,6 @@ import (
 )
 
 func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.DingTalkNotification, error) {
-	println("===============BuildDingTalkNotification start===================================>")
 
 	title, err := template.ExecuteTextString(`{{ template "ding.link.title" . }}`, promMessage)
 	if err != nil {
@@ -23,35 +23,35 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 		return nil, err
 	}
 	var buttons []models.DingTalkNotificationButton
+	var applicationName string
 	for i, alert := range promMessage.Alerts.Firing() {
 		buttons = append(buttons, models.DingTalkNotificationButton{
 			Title:     fmt.Sprintf("Graph for alert #%d", i+1),
 			ActionURL: alert.GeneratorURL,
 		})
+		applicationNames := alert.Labels.Values()
+		for j, name := range applicationNames {
+			print(j)
+			content = content + applicationMap[name]
+			applicationName = name
+		}
 	}
+
 	notification := &models.DingTalkNotification{
 		MessageType: "markdown",
 		Markdown: &models.DingTalkNotificationMarkdown{
 			Title: title,
-			Text:  "@17313006617" + content,
+			Text:  content,
 		},
 	}
 
-	println(content)
-	println("===============BuildDingTalkNotification 11111111===================================>")
-	println(promMessage.CommonLabels.Values())
-	println(promMessage.CommonLabels.Names())
-
 	notification.At = new(models.DingTalkNotificationAt)
-	if v, ok := map[string]string(promMessage.CommonLabels)["at_mobiles"]; ok {
-		notification.At.AtMobiles = strings.Split(strings.TrimSpace(v), ",")
+	if v, ok := applicationMap[applicationName]; ok {
+		notification.At.AtMobiles = strings.Split(strings.TrimSpace(strings.Replace(strings.TrimSpace(v), "@", "", -1)), ",")
 	}
-
 	if _, ok := map[string]string(promMessage.CommonLabels)["is_at_all"]; ok {
 		notification.At.IsAtAll = true
 	}
-	println("===============BuildDingTalkNotification 222222===================================>")
-
 	return notification, nil
 }
 
@@ -60,9 +60,6 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 	if err != nil {
 		return nil, errors.Wrap(err, "error encoding DingTalk request")
 	}
-
-	print("==================================================>")
-
 	httpReq, err := http.NewRequest("POST", webhookURL, bytes.NewReader(body))
 	if err != nil {
 		return nil, errors.Wrap(err, "error building DingTalk request")
@@ -78,8 +75,6 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 	if req.StatusCode != 200 {
 		return nil, errors.Errorf("unacceptable response code %d", req.StatusCode)
 	}
-
-	print("==================================================>")
 
 	var robotResp models.DingTalkNotificationResponse
 	enc := json.NewDecoder(req.Body)
