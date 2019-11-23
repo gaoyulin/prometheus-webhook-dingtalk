@@ -27,8 +27,6 @@ var (
 )
 
 func main() {
-	level.Info(logger).Log("msg", "Starting ===================>", "version", version.Info())
-
 	allowedLevel := promlog.AllowedLevel{}
 	flag.AddFlags(kingpin.CommandLine, &allowedLevel)
 	kingpin.Version(version.Print("prometheus-webhook-dingtalk"))
@@ -36,6 +34,9 @@ func main() {
 	kingpin.Parse()
 
 	logger := promlog.New(allowedLevel)
+
+	level.Info(logger).Log("msg", "Starting ===================>, "version", version.Info())
+
 	level.Info(logger).Log("msg", "Starting prometheus-webhook-dingtalk", "version", version.Info())
 
 	// Load & validate customized template file

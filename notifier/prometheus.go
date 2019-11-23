@@ -12,6 +12,7 @@ import (
 )
 
 func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.DingTalkNotification, error) {
+	logger := promlog.New(allowedLevel)
 	level.Info(logger).Log("msg", "Starting  model===================>", "version", version.Info())
 
 	title, err := template.ExecuteTextString(`{{ template "ding.link.title" . }}`, promMessage)
