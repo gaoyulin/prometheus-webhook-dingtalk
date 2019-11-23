@@ -58,6 +58,8 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 		return nil, errors.Wrap(err, "error encoding DingTalk request")
 	}
 
+	print("==================================================>")
+
 	httpReq, err := http.NewRequest("POST", webhookURL, bytes.NewReader(body))
 	if err != nil {
 		return nil, errors.Wrap(err, "error building DingTalk request")
@@ -73,6 +75,8 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 	if req.StatusCode != 200 {
 		return nil, errors.Errorf("unacceptable response code %d", req.StatusCode)
 	}
+
+	print("==================================================>")
 
 	var robotResp models.DingTalkNotificationResponse
 	enc := json.NewDecoder(req.Body)

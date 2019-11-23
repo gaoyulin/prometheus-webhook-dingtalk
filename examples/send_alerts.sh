@@ -13,7 +13,8 @@ alerts1='{
                 "job": "node",
                 "service": "prometheus_bot",
                 "severity": "warning",
-                "supervisor": "runit"
+                "supervisor": "runit",
+                "atMobiles": "17313006617"
             },
             "annotations": {
                 "summary": "Oops, something happend!"
@@ -43,4 +44,4 @@ alerts1='{
     "version": "3"
 }'
 
-curl -XPOST -d"$alerts1" http://localhost:8060/dingtalk/general_alerting/send
+curl -XPOST -d"$alerts1" http://localhost:7251/dingtalk/webhook/send

@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gaoyulin/prometheus-webhook-dingtalk/chilog"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/template"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/webrouter"
 	"github.com/go-chi/chi"
@@ -34,6 +33,7 @@ func main() {
 	kingpin.Parse()
 
 	logger := promlog.New(allowedLevel)
+	level.Info(logger).Log("msg", "Starting ===================>", ",version", allowedLevel.String())
 
 	level.Info(logger).Log("msg", "Starting ===================>", ",version", version.Info())
 
@@ -67,7 +67,7 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.CloseNotify)
 	r.Use(middleware.RealIP)
-	r.Use(middleware.RequestLogger(&chilog.KitLogger{Logger: logger}))
+	//r.Use(middleware.RequestLogger(&chilog.KitLogger{Logger: logger}))
 	r.Use(middleware.Recoverer)
 
 	dingTalkResource := &webrouter.DingTalkResource{

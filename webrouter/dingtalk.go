@@ -34,6 +34,8 @@ func (rs *DingTalkResource) SendNotification(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	level.Error(logger).Log("msg", "start====================>", "err")
+
 	var promMessage models.WebhookMessage
 	if err := json.NewDecoder(r.Body).Decode(&promMessage); err != nil {
 		level.Error(logger).Log("msg", "Cannot decode prometheus webhook JSON request", "err", err)
@@ -42,11 +44,14 @@ func (rs *DingTalkResource) SendNotification(w http.ResponseWriter, r *http.Requ
 	}
 
 	notification, err := notifier.BuildDingTalkNotification(&promMessage)
+	level.Error(logger).Log("msg", "BuildDingTalkNotification====================>", "notification")
+
 	if err != nil {
 		level.Error(logger).Log("msg", "Failed to build notification", "err", err)
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
+	level.Error(logger).Log("msg", "SendDingTalkNotification====================>", "notification")
 
 	robotResp, err := notifier.SendDingTalkNotification(rs.HttpClient, webhookURL, notification)
 	if err != nil {
