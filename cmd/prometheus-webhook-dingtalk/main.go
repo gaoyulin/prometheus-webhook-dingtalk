@@ -35,7 +35,7 @@ func main() {
 
 	logger := promlog.New(allowedLevel)
 
-	level.Info(logger).Log("msg", "Starting ===================>, "version", version.Info())
+	level.Info(logger).Log("msg", "Starting ===================>", ",version", version.Info())
 
 	level.Info(logger).Log("msg", "Starting prometheus-webhook-dingtalk", "version", version.Info())
 
