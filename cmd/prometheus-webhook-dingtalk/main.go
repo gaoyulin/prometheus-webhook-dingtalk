@@ -26,6 +26,7 @@ var (
 )
 
 func main() {
+	print("===================start==============>")
 	allowedLevel := promlog.AllowedLevel{}
 	flag.AddFlags(kingpin.CommandLine, &allowedLevel)
 	kingpin.Version(version.Print("prometheus-webhook-dingtalk"))
