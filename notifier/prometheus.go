@@ -12,8 +12,7 @@ import (
 )
 
 func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.DingTalkNotification, error) {
-	print("===============BuildDingTalkNotification start===================================>")
-	errors.New("error encoding DingTalk request    =======================  start")
+	println("===============BuildDingTalkNotification start===================================>")
 
 	title, err := template.ExecuteTextString(`{{ template "ding.link.title" . }}`, promMessage)
 	if err != nil {
@@ -37,8 +36,10 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 			Text:  content,
 		},
 	}
-	errors.New("error encoding DingTalk request    =======================  other")
-	print(promMessage)
+	println("===============BuildDingTalkNotification 11111111===================================>")
+	print(promMessage.CommonLabels.Values())
+	print(promMessage.CommonLabels.Names())
+
 	notification.At = new(models.DingTalkNotificationAt)
 	if v, ok := map[string]string(promMessage.CommonLabels)["at_mobiles"]; ok {
 		notification.At.AtMobiles = strings.Split(strings.TrimSpace(v), ",")
@@ -47,13 +48,12 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 	if _, ok := map[string]string(promMessage.CommonLabels)["is_at_all"]; ok {
 		notification.At.IsAtAll = true
 	}
-	errors.New("error encoding DingTalk request    =======================  end")
+	println("===============BuildDingTalkNotification 222222===================================>")
 
 	return notification, nil
 }
 
 func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notification *models.DingTalkNotification) (*models.DingTalkNotificationResponse, error) {
-	errors.New("error encoding DingTalk request    =======================  start")
 	body, err := json.Marshal(&notification)
 	if err != nil {
 		return nil, errors.Wrap(err, "error encoding DingTalk request")
@@ -76,7 +76,6 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 	if req.StatusCode != 200 {
 		return nil, errors.Errorf("unacceptable response code %d", req.StatusCode)
 	}
-	errors.New("error encoding DingTalk request    =======================  other")
 
 	print("==================================================>")
 
@@ -85,8 +84,5 @@ func SendDingTalkNotification(httpClient *http.Client, webhookURL string, notifi
 	if err := enc.Decode(&robotResp); err != nil {
 		return nil, errors.Wrap(err, "error decoding response from DingTalk")
 	}
-
-	errors.New("error encoding DingTalk request    =======================  end")
-
 	return &robotResp, nil
 }
