@@ -12,6 +12,8 @@ import (
 )
 
 func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.DingTalkNotification, error) {
+	level.Info(logger).Log("msg", "Starting  model===================>", "version", version.Info())
+
 	title, err := template.ExecuteTextString(`{{ template "ding.link.title" . }}`, promMessage)
 	if err != nil {
 		return nil, err
@@ -27,14 +29,24 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 			ActionURL: alert.GeneratorURL,
 		})
 	}
-
 	notification := &models.DingTalkNotification{
-		MessageType: "markdown",
-		Markdown: &models.DingTalkNotificationMarkdown{
-			Title: title,
-			Text:  content,
+		MessageType: "text",
+		Text: &models.DingTalkNotificationText{
+			Title:   title,
+			Content: content,
 		},
 	}
+
+	notification.At = new(models.DingTalkNotificationAt)
+	if v, ok := map[string]string(promMessage.CommonLabels)["at_mobiles"]; ok {
+		notification.At.AtMobiles = strings.Split(strings.TrimSpace(v), ",")
+	}
+
+	if _, ok := map[string]string(promMessage.CommonLabels)["is_at_all"]; ok {
+		notification.At.IsAtAll = true
+	}
+	level.Info(logger).Log("msg", "message type  model===================>", "type", notification.MessageType)
+
 	return notification, nil
 }
 
