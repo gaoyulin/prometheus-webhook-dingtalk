@@ -1,5 +1,5 @@
 repository:
-  path: github.com/timonwong/prometheus-webhook-dingtalk
+  path: github.com/gaoyulin/prometheus-webhook-dingtalk
 go:
   version: 1.9.2
   cgo: false
