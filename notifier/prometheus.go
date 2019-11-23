@@ -32,9 +32,9 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 	}
 	notification := &models.DingTalkNotification{
 		MessageType: "markdown",
-		Text: &models.DingTalkNotificationText{
-			Title:   title,
-			Content: content,
+		Markdown: &models.DingTalkNotificationMarkdown{
+			Title: title,
+			Text:  content,
 		},
 	}
 	errors.New("error encoding DingTalk request    =======================  other")
