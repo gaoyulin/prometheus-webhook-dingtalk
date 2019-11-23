@@ -31,7 +31,7 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 		})
 	}
 	notification := &models.DingTalkNotification{
-		MessageType: "text",
+		MessageType: "markdown",
 		Text: &models.DingTalkNotificationText{
 			Title:   title,
 			Content: content,
