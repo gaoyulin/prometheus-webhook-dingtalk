@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/chilog"
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/template"
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/webrouter"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-kit/kit/log"
@@ -13,9 +16,6 @@ import (
 	"github.com/prometheus/common/promlog"
 	"github.com/prometheus/common/promlog/flag"
 	"github.com/prometheus/common/version"
-	"github.com/timonwong/prometheus-webhook-dingtalk/chilog"
-	"github.com/timonwong/prometheus-webhook-dingtalk/template"
-	"github.com/timonwong/prometheus-webhook-dingtalk/webrouter"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -27,6 +27,8 @@ var (
 )
 
 func main() {
+	level.Info(logger).Log("msg", "Starting ===================>", "version", version.Info())
+
 	allowedLevel := promlog.AllowedLevel{}
 	flag.AddFlags(kingpin.CommandLine, &allowedLevel)
 	kingpin.Version(version.Print("prometheus-webhook-dingtalk"))

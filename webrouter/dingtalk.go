@@ -5,11 +5,11 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/models"
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/notifier"
 	"github.com/go-chi/chi"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/timonwong/prometheus-webhook-dingtalk/models"
-	"github.com/timonwong/prometheus-webhook-dingtalk/notifier"
 )
 
 type DingTalkResource struct {
