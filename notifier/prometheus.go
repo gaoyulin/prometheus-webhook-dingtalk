@@ -33,12 +33,14 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 		MessageType: "markdown",
 		Markdown: &models.DingTalkNotificationMarkdown{
 			Title: title,
-			Text:  content,
+			Text:  "@17313006617" + content,
 		},
 	}
+
+	println(content)
 	println("===============BuildDingTalkNotification 11111111===================================>")
-	print(promMessage.CommonLabels.Values())
-	print(promMessage.CommonLabels.Names())
+	println(promMessage.CommonLabels.Values())
+	println(promMessage.CommonLabels.Names())
 
 	notification.At = new(models.DingTalkNotificationAt)
 	if v, ok := map[string]string(promMessage.CommonLabels)["at_mobiles"]; ok {
