@@ -30,8 +30,9 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 			ActionURL: alert.GeneratorURL,
 		})
 		applicationNames := alert.Labels.Values()
-		for j, name := range applicationNames {
-			print(j)
+		print(applicationNames)
+		for _, name := range applicationNames {
+			print(name)
 			if v, ok := nacos.GetMobiles(applicationName); ok {
 				content = content + v
 			}
@@ -39,7 +40,7 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 			applicationName = name
 		}
 	}
-
+	print(content)
 	notification := &models.DingTalkNotification{
 		MessageType: "markdown",
 		Markdown: &models.DingTalkNotificationMarkdown{
