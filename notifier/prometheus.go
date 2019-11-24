@@ -32,7 +32,10 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 		applicationNames := alert.Labels.Values()
 		for j, name := range applicationNames {
 			print(j)
-			content = content + applicationMap[name]
+			if v, ok := nacos.GetMobiles(applicationName); ok {
+				content = content + v
+			}
+			content = content
 			applicationName = name
 		}
 	}
@@ -46,7 +49,7 @@ func BuildDingTalkNotification(promMessage *models.WebhookMessage) (*models.Ding
 	}
 
 	notification.At = new(models.DingTalkNotificationAt)
-	if v, ok := applicationMap[applicationName]; ok {
+	if v, ok := nacos.GetMobiles(applicationName); ok {
 		notification.At.AtMobiles = strings.Split(strings.TrimSpace(strings.Replace(strings.TrimSpace(v), "@", "", -1)), ",")
 	}
 	if _, ok := map[string]string(promMessage.CommonLabels)["is_at_all"]; ok {

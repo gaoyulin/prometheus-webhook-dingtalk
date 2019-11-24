@@ -8,9 +8,9 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
-var applicationMap = make(map[string]string) ;
+var applicationMap = make(map[string]string)
 
-func main() {
+func InitData() {
 	var namespaceId = "2afe13ee-d5e4-4154-8146-15f973b27a63"
 	configClient, error := clients.CreateConfigClient(map[string]interface{}{
 		"serverConfigs": []constant.ServerConfig{
@@ -62,7 +62,7 @@ func main() {
 	})
 }
 
-func jsonToMap(m map[string]interface{})  {
+func jsonToMap(m map[string]interface{}) {
 	if v, ok := m["applications"]; ok {
 		ws := v.([]interface{})
 		for _, wsItem := range ws {
@@ -79,4 +79,8 @@ func jsonToMap(m map[string]interface{})  {
 			println()
 		}
 	}
+}
+func GetMobiles(appName string) (string, bool) {
+	value, ok := applicationMap[appName]
+	return value, ok
 }

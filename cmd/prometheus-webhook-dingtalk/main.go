@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gaoyulin/prometheus-webhook-dingtalk/nacos"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/template"
 	"github.com/gaoyulin/prometheus-webhook-dingtalk/webrouter"
 	"github.com/go-chi/chi"
@@ -89,5 +90,5 @@ func main() {
 		level.Error(logger).Log("msg", "Error starting HTTP server", "err", err)
 		os.Exit(1)
 	}
-	initClient()
+	nacos.InitData()
 }
